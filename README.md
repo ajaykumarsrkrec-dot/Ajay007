@@ -1,22 +1,120 @@
-<<<<<<< HEAD
-# my_first_app
+import 'package:flutter/material.dart';
 
-A new Flutter project.
+void main() {
+  runApp(const MyApp());
+}
 
-## Getting Started
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
-This project is a starting point for a Flutter application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Simple Calculator',
+      home: const CalculatorScreen(),
+    );
+  }
+}
 
-A few resources to get you started if this is your first Flutter project:
+class CalculatorScreen extends StatefulWidget {
+  const CalculatorScreen({super.key});
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+  @override
+  State<CalculatorScreen> createState() => _CalculatorScreenState();
+}
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-=======
-# Ajay007
-MyApps
->>>>>>> 84ed2217b302ca306882f33171604b3976dcdb79
+class _CalculatorScreenState extends State<CalculatorScreen> {
+  final TextEditingController num1Controller = TextEditingController();
+  final TextEditingController num2Controller = TextEditingController();
+
+  double result = 0;
+
+  void calculate(String operation) {
+    double num1 = double.tryParse(num1Controller.text) ?? 0;
+    double num2 = double.tryParse(num2Controller.text) ?? 0;
+
+    setState(() {
+      switch (operation) {
+        case '+':
+          result = num1 + num2;
+          break;
+        case '-':
+          result = num1 - num2;
+          break;
+        case '*':
+          result = num1 * num2;
+          break;
+        case '/':
+          result = num2 != 0 ? num1 / num2 : 0;
+          break;
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Simple Calculator'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: num1Controller,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Enter First Number',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 15),
+            TextField(
+              controller: num2Controller,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Enter Second Number',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () => calculate('+'),
+                  child: const Text('+'),
+                ),
+                ElevatedButton(
+                  onPressed: () => calculate('-'),
+                  child: const Text('-'),
+                ),
+                ElevatedButton(
+                  onPressed: () => calculate('*'),
+                  child: const Text('*'),
+                ),
+                ElevatedButton(
+                  onPressed: () => calculate('/'),
+                  child: const Text('/'),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 30),
+
+            Text(
+              'Result = $result',
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
